@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Register</title>
+	<meta name="description" content="Registration Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css'%}">
+
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<header>
+	<nav id="nav_login">
+		<a href="{% url 'login:index' %}" class="left">Login</a>
+		<a href="" class="right current">Register</a>
+	</nav>
+</header>
+<body>
+    <main>
+    <h1> Registration Request Form </h1>
+        <div class="register">
+    <form action = "{% url 'register:save' %}" method ="post">
+        {%csrf_token%}
+	  <div>
+		  <label for="email">Email Address:</label>
+		  <input type="email" id="email" name="email_ros">
+	  </div>
+	  <h2>User Type</h2>
+	  <ul class="usertype">
+		  <li>
+			  <input type="radio" id="ROOT" name="usertype" value="4">
+			  <label for="ROOT">ROOT</label>
+		  </li>
+		  <li>
+			  <input type="radio" id="ADMIN" name="usertype" value="3">
+			  <label for="ADMIN">ADMIN</label>
+		  </li>
+		  <li>
+			  <input type="radio" id="assist" name="usertype" checked="checked" value="2">
+			  <label for="assist">ASSISTANT</label>
+		  </li>
+	  </ul>
+        <input type="submit" value="Submit">
+    </form>
+            </div>
+        </main>
+</body>
+</html>

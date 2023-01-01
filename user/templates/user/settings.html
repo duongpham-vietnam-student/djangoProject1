@@ -1,0 +1,98 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Settings</title>
+	<meta name="description" content="Settings Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css' %}">
+
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<header>
+
+	<nav id="nav_main">
+        <form id="sett" method="post" action="{% url 'user:setting' %}" class="right">
+            {% csrf_token %}
+              <input type="submit" name="setting" value="Dashboard" class="right current">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+        {% if setup_mode %}
+        <form id="empl" method="post" action="{% url 'user:setup' %}" class="left">
+                {% csrf_token %}
+              <input type="submit" name="empl" value="Set up" class="left">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+        {% endif %}
+        <form id="edit" method="post" action="{% url 'schedule:index' %}">
+            {% csrf_token %}
+              <input type="submit" name="edit" value="Schedule" class="">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+        {% if request_mode %}
+        <form id="requ" method="post" action="{% url 'user:request' %}">
+            {% csrf_token %}
+              <input type="submit" name="request" value="Request" class="">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+        {% endif %}
+	</nav>
+</header>
+<body>
+	<main>
+		<div class="large">
+			<div class="settings">
+				<div class="editemployrow">
+                    <h2>Username:  </h2>
+                    <h3>{{ user.username }}</h3>
+
+				</div>
+				<div class="editemployrow">
+                    <h2>ID:</h2>
+                    <h3>{{ user.id }}</h3>
+
+				</div>
+				<div class="editemployrow">
+					<h2>User Type:   </h2>
+                    <h3>{{ user.typefix }}</h3>
+
+				</div>
+				<div class="editemployrow">
+					<h2>Password:</h2>
+					<h3>********</h3>
+				</div>
+				<div class="editemployrow">
+					<h2>Email Address:</h2>
+					<h3>{{ user.email }}</h3>
+				</div>
+                <form action="{% url 'user:changeinfouser1' %}" method="post">
+                    {% csrf_token %}
+
+                        <input type="hidden" name="id" value= {{ id }}>
+                        <input type="submit" id="save" value="Change your info">
+
+
+                </form>
+                <form action="{% url 'login:index' %}" method="get">
+                    {% csrf_token %}
+
+
+                        <input type="submit" id="save" value="Log out">
+
+
+                </form>
+            </div>
+		</div>
+	</main>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Register</title>
+	<meta name="description" content="Registration Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css'%}">
+
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<body>
+    {% if login %}
+    <h1> Your username or password incorrect. </h1>
+    {% endif %}
+    {% if no_account%}
+    <h1> Your email incorrect. </h1>
+    {% endif %}
+     {% if has_account%}
+    <h1> The code has sent in your email. Check it!</h1>
+      <form action="{% url 'login:forgot_code' %}" method="post">
+				{% csrf_token %}
+				<label for="code">Please input your code:</label>
+				<input type="text" name="code"><br>
+                <input type="submit" name="submit" value="Verify">
+      </form>
+    {% endif %}
+    <a href =" {% url 'login:index' %}">
+        Click to return login page!
+    </a>
+
+</body>
+</html>

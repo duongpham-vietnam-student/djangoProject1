@@ -1,0 +1,343 @@
+/* the styles for the elements */
+* {
+	margin: 0;
+	padding: 0;
+}
+html {
+	background-color: #2a2a2a;
+}
+body {
+	font-family: Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    margin: 0 auto;
+	padding: 3em;
+    border: 3px solid #8e9299;
+    background-color: #DDDDDD;
+	padding-bottom: 7em;
+}
+a:focus, a:hover {
+	font-style: italic;
+}
+
+/* the styles for the header */
+
+header {
+	float: left;
+	margin-bottom: 1em;
+}
+.shadow {
+	text-shadow: 2px 2px 2px #800000;
+}
+/* the styles for the navigation menus */
+
+nav{
+	text-align: center;
+ 	display:grid;
+	border: 1px solid black;
+	border-radius: 10px;
+	clear: both;
+}
+nav a{
+	display: block;
+	text-align: center;
+	padding: 10px 20px;
+	text-decoration: none;
+	background-color: #FAFAFA;
+	color: black;
+	font-weight: bold;
+	float: left;
+}
+nav form{
+	display: block;
+	text-align: center;
+	align-content: center;
+	text-decoration: none;
+	background-color: #FAFAFA;
+	color: black;
+	font-weight: bold;
+	float: left;
+}
+nav form input[type="submit"]{
+	border: 0;
+	border-radius: 0;
+	background-color: white;
+	padding: 10px 20px;
+	color: black;
+	width: 100%;
+	font-weight: bold;
+}
+input[type="submit"].current,
+.current{
+	color: white;
+	background-color: #07006B;
+}
+nav a:hover, a:focus,
+nav input[type="submit"]:hover, input[type="submit"]:focus{
+	color: white;
+	background-color: #07006B;
+}
+input[type="submit"].left,
+.left{
+	border-bottom-left-radius: 9px;
+	border-top-left-radius: 9px;
+}
+input[type="submit"].right,
+.right{
+	border-bottom-right-radius: 9px;
+	border-top-right-radius: 9px;
+}
+#nav_login{
+	grid-template-columns: repeat(2,1fr);
+}
+#nav_main{
+	grid-template-columns: repeat(4,1fr);
+}
+
+
+/* the styles for the main content */
+main {
+	clear: left;
+	background-color: white;
+	border: 1px solid black;
+	border-radius: 10px;
+	padding: 1em 0 5em 0;
+}
+
+main h1 {
+	font-size: 2em;
+	margin: 0.67em 0;
+	text-align:center;
+	color: navy;
+}
+main h2,
+.user-pass label{
+	text-decoration: underline;
+	font-size: 1.5em;
+}
+main h3{
+	text-align: center;
+}
+
+input[type="button"],
+input[type="submit"]{
+	padding: 5px 10px;
+	border-radius: 10px;
+	background-color: #07006B;
+	color: white;
+	width: 100%;
+}
+
+input.logout{
+	float: right;
+	margin-bottom: 2em;
+	width: 10vw;
+}
+
+/*  Login form    */
+div.user-pass form{
+	display: grid;
+	text-align: center;
+	grid-template-rows: repeat(4,1fr);
+	grid-row-gap: 20px;
+	width: 40vw;
+	margin: 0 20vw 20px 20vw;
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 20px 0;
+	background-color: #F9F9F9;
+}
+div input[type="text"],
+div input[type="password"],
+div input[type="email"]{
+	padding: 5px 0;
+	text-align: center;
+}
+div ul{
+	text-align: center;
+	display: grid;
+	grid-template-columns: repeat(2,0.5fr);
+	grid-column-gap: 5vw;
+	align-content: center;
+}
+div.user-pass label,
+div.user-pass input[type="text"],
+div.user-pass input[type="password"],
+div.user-pass ul {
+	width: 30vw;
+	margin: 0 5vw;
+}
+input[type="button"].forgotpass{
+	text-decoration: underline;
+	background: none;
+	color: blue;
+	border: none;
+}
+input[type="button"].forgotpass:hover{
+	font-style: italic;
+}
+
+/*  Registration  form  */
+div.register form{
+	display: grid;
+	text-align: center;
+	grid-template-rows: repeat(5,1fr);
+	grid-row-gap: 20px;
+	width: 60vw;
+	margin: 20px 10vw;
+	border: 1px solid black;
+	border-radius: 5px;
+	padding: 50px 0;
+	background-color: #F9F9F9;
+}
+ul.usertype{
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+	align-content: center;
+	width: 50vw;
+	margin: 0 5vw;
+}
+ul.usertype li{
+	list-style: none;
+}
+ul.usertype li input,
+ul.usertype li label{
+	display: block;
+	border: 1px solid black;
+	border-radius: 10px;
+	padding: 1vw;
+	background-color: white;
+	transition: background-color 0.5s ease;
+}
+ul.usertype li input[type="radio"]{
+	opacity: 0;
+	z-index: 100;
+}
+ul.usertype li input[type="radio"]:checked+label{
+	background-color: #CFCFCF;
+}
+ul.usertype li label:hover{
+	background-color: #E4E4E4;
+}
+div.register div label{
+	width: 15vw;
+	float: left;
+	display: block;
+	text-align: end;
+	font-size: 1.5em;
+}
+div.register div input[type="text"],
+div.register div input[type="password"],
+div.register div input[type="email"]{
+	width: 30vw;
+	margin-left: 5vw;
+}
+div.register div h2{
+	width: 45vw;
+	margin-left: 5vw;
+}
+div.register input[type="button"]{
+	width: 40vw;
+	margin: 0 10vw;
+}
+
+/* Main Pages   */
+div.large table{
+	width: 77.5vw;
+	margin: 0 1.25vw;
+	border: 1px solid black;
+}
+div.large table tr{
+	column-rule: medium solid black;
+}
+tr.header{
+	background-color: #ABABAB;
+}
+table, th, td{
+	border: 1px solid black;
+	border-collapse: collapse;
+	padding: 5px 2px;
+	text-align: center;
+}
+th{
+	text-decoration: underline;
+	font-weight: 700;
+}
+div.large ul{
+	width: 60vw;
+	margin: 5em 10vw 0 10vw;
+}
+div.large input[type="button"]{
+	background-color: #E7E7E7;
+	color: black;
+}
+tr.selected{
+	background-color: navy;
+}
+ul.three{
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+}
+/* Schedule */
+tbody.schedule th,
+tbody.schedule td{
+	font-size: .7em;
+}
+/* Requests */
+.ppass{
+	opacity: 0;
+}
+.ppass:hover{
+	opacity: 1;
+}
+
+div.settings{
+	display: grid;
+	grid-template-rows: repeat(5,1fr);
+	grid-row-gap: 2em;
+}
+div.editemploy{
+	display: grid;
+	grid-template-rows: repeat(6,1fr);
+	grid-row-gap: 2em;
+	margin: 0 10vw;
+}
+div.settingrow{
+	display: grid;
+	grid-template-columns: repeat(3,1fr);
+}
+div.editemployrow{
+	display: grid;
+	grid-template-columns: repeat(2,1fr);
+}
+div.settings h2{
+	text-align: center;
+	text-decoration: none;
+}
+div.editemploy h2{
+	text-align: center;
+	text-decoration: none;
+}
+div.settings input[type="button"],
+div.editemploy input[type="button"]{
+	width: 15vw;
+}
+
+
+
+@media screen and (min-width: 600px){
+	header{
+		width: 70vw;
+		padding:0 5vw;
+	}
+	body{
+		width: 80vw;
+	}
+
+	aside{
+		clear: both;
+		width: 100%;
+	}
+	body{
+		clear: both;
+	}
+}

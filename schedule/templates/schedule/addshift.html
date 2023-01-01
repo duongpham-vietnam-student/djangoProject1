@@ -1,0 +1,74 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Employee Editor</title>
+	<meta name="description" content="Edit Employee Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+
+	<link rel="stylesheet" href="{% static 'main.css' %}">
+	<script src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<header>
+	<nav id="nav_main">
+        <form id="back" method="post" action="{% url 'user:setup' %}">
+                {% csrf_token %}
+              <input type="submit" name="empl" value="Back">
+              <input type="hidden" name="id" value={{ id }} >
+
+        </form>
+	</nav>
+</header>
+<body>
+	<main>
+        <form method="post" action="{% url 'schedule:edit_create' %}">
+            {% csrf_token %}
+		<div class="large">
+
+			<div class="editemploy">
+				<div class="editemployrow">
+					<h2>Employee ID:</h2>
+					<input type="text"  name="eid">
+				</div>
+				<div class="editemployrow">
+					<h2>Name:</h2>
+					<input type="text"  name="name">
+				</div>
+				<div class="editemployrow">
+					<h2>Brigade Title:</h2>
+					<select name="title" id="brtitle">
+						<option value="4">Kitchen Leader</option>
+						<option value="3">Sous Chef</option>
+						<option value="2">Line Cook</option>
+						<option value="1">Junior Cook</option>
+						<option value="0">Dishwasher</option>
+					</select>
+				</div>
+				<div class="editemployrow">
+					<h2>Min Hours:</h2>
+					<input type="number"  name="minhour" min="0" max="84" step="1">
+				</div>
+				<div class="editemployrow">
+					<h2>Max Hours:</h2>
+					<input type="number"  name="maxhour" min="0" max="84" step="1">
+				</div>
+			</div>
+			<ul>
+                <input type="hidden" name="id" value="{{ id }}">
+                <input type="submit" value="Accept Create" name="submit">
+			</ul>
+		</div>
+        </form>
+	</main>
+</body>
+
+</html>

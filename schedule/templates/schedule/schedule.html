@@ -1,0 +1,100 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Schedule</title>
+	<meta name="description" content="Current Schedule">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css' %}">
+
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<header>
+
+	<nav id="nav_main">
+        <form id="empl" method="post" action="{% url 'user:setup' %}" class="left">
+                {% csrf_token %}
+              <input type="submit" name="empl" value="Employee" class="left">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+        <form id="edit" method="post" action="{% url 'schedule:index' %}">
+            {% csrf_token %}
+              <input type="submit" name="edit" value="Schedule" class="current">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+        <form id="requ" method="post" action="{% url 'user:request' %}">
+            {% csrf_token %}
+              <input type="submit" name="request" value="Request" class="">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+        <form id="sett" method="post" action="{% url 'user:setting' %}" class="right">
+            {% csrf_token %}
+              <input type="submit" name="setting" value="Setting" class="right">
+              <input type="hidden" name="id" value="{ id }}" >
+        </form>
+	</nav>
+</header>
+<body>
+	<main>
+		<div class="large">
+			<table>
+				<tbody class="schedule">
+					<tr class="header">
+						<th style="width:10%">Employee</th>
+						<th>Mon AM</th>
+						<th>Mon PM</th>
+						<th>Tue AM</th>
+						<th>Tue PM</th>
+						<th>Wed AM</th>
+						<th>Wed PM</th>
+						<th>Thurs AM</th>
+						<th>Thurs PM</th>
+						<th>Fri AM</th>
+						<th>Fri PM</th>
+						<th>Sat AM</th>
+						<th>Sat PM</th>
+                        <th>Sun AM</th>
+						<th>Sun PM</th>
+						<th style="width:10%">Total Hours</th>
+					</tr>
+					<!-- Use this as template to import Employees -->
+					{% for i in schedule %}
+                    <tr>
+                        {% for j in i %}
+						<td>{{ j }}</td>
+                        {% endfor %}
+					</tr>
+                    {% endfor %}
+
+                    {% for i in number_week %}
+                    <tr>
+                    {% for j in i %}
+                    <td>{{ j }}</td>
+                    {% endfor %}
+					</tr>
+
+                    {% endfor %}
+
+				</tbody>
+			</table>
+            <ul class="">
+                <form method="post" action="{% url 'schedule:generate' %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Generate Schedule" >
+                    <input type="hidden" name="id" value="{{ id }}">
+                </form>
+
+            </ul>
+		</div>
+	</main>
+</body>
+</html>

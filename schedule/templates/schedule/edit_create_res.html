@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<meta name="description" content="Registration Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css'%}">
+
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<body>
+    {% if create_empl_done %}
+        <h1> The new employee create success! </h1>
+        {% endif %}
+    {% if edit_empl_done %}
+        <h1> The employee data fix success! </h1>
+        {% endif %}
+    {% if create_assi_done %}
+        <h1> The new assignment create success! </h1>
+        {% endif %}
+    {% if edit_assi_done %}
+        <h1> The assignment data fix success! </h1>
+        {% endif %}
+    {% if edit_shift_done %}
+        <h1> The shift data fix success! </h1>
+        {% endif %}
+    {% if fail %}
+        <h1> Opps! Something went wrong! </h1>
+    {% endif %}
+    <form action="{% url 'user:setup' %}" method="post">
+                    {% csrf_token %}
+        <input type="hidden" name="id" value={{ id }} >
+        <input type="submit" id="save" value="Back">
+    </form>
+
+</body>
+</html>

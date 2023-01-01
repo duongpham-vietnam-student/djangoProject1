@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Login</title>
+	<meta name="description" content="Forgot Password Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css' %}">
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+	<meta name="theme-color" content="#fafafa">
+</head>
+
+<header>
+	<nav id="nav_login">
+		<a href="{% url 'login:index' %}" class="left current">Login</a>
+		<a href=" {% url 'register:index' %}" class="center">Register</a>
+        <a href=" {% url 'login:forgot' %}" class="right">Forgot Password</a>
+	</nav>
+</header>
+<body>
+    <main>
+    <h1> Login page to BOA! </h1>
+    <div class="user-pass">
+			<form action="{% url 'login:forgot' %}" method="post">
+				{% csrf_token %}
+				<label for="username">Your email:</label>
+				<input type="text" name="username"><br>
+				<input type="submit" name="submit" value="Submit">
+    		</form>
+	</div>
+    </main>
+</body>
+</html>

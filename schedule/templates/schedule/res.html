@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Register</title>
+	<meta name="description" content="Registration Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css'%}">
+
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<body>
+    <h1> The schedule create success! </h1>
+    <form action="{% url 'schedule:index' %}" method="post">
+                    {% csrf_token %}
+        <input type="hidden" name="id" value={{ id }} >
+        <input type="submit" id="save" value="Back">
+    </form>
+
+</body>
+</html>

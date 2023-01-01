@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Login</title>
+	<meta name="description" content="Main Login Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css' %}">
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+	<meta name="theme-color" content="#fafafa">
+</head>
+
+<header>
+	<nav id="nav_main">
+        <form id="empl" method="post" action="{% url 'user:employee' %}">
+                {% csrf_token %}
+              <input type="button" name="empl" value="Employee">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+        <form id="edit" method="post" action="{% url 'user:edit' %}">
+            {% csrf_token %}
+              <input type="submit" name="edit" value="Schedule">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+        <form id="requ" method="post" action="{% url 'user:request' %}">
+            {% csrf_token %}
+              <input type="submit" name="request" value="Request">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+        <form id="sett" method="post" action="{% url 'user:setting' %}">
+            {% csrf_token %}
+              <input type="submit" name="setting" value="Setting">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+	</nav>
+</header>
+<body>
+    <main>
+    <h1> This page support you change user information! </h1>
+    <div class="user-pass">
+			<form action="{% url 'user:changeinfouser2' %}" method="post">
+				{% csrf_token %}
+                <input type="hidden" name="id" value={{ id }}>
+				<label for="email_ros">New email here (blank is not change):</label>
+				<input type="text" name="email_ros"><br>
+				<label for="password">New password here (blank is not change):</label>
+				<input name="password" type="password">
+                <label for="password_1">Old password:</label>
+				<input name="password_1" type="password">
+				<ul>
+					<input type="submit" value="Submit">
+				</ul>
+    		</form>
+	</div>
+    </main>
+</body>
+</html>

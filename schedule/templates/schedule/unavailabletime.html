@@ -1,0 +1,73 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Assignments</title>
+	<meta name="description" content="Current Employees Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css' %}">
+
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<header>
+
+	<nav id="nav_main">
+        <form id="sett" method="post" action="{% url 'user:setup' %}" class="right">
+            {% csrf_token %}
+              <input type="submit" name="setting" value="Back" class="right">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+	</nav>
+</header>
+<body>
+	<main>
+		<div class="large">
+            <form action="{% url 'schedule:editunav' %}" method="post">
+            {% csrf_token %}
+            <h1> EID: {{ eid }}</h1>
+            <h1>Name: {{ name }}</h1>
+			<table>
+				<tbody class="emp-list">
+					<tr class="header">
+						<th style="width:10%">Choose</th>
+						<th style="width:20%">Day of week</th>
+						<th style="width:15%">Start time</th>
+						<th style="width:10%">End time</th>
+						<th style="width:10%">Reason</th>
+					</tr>
+					<!-- Use this as template to import Employees -->
+					{% for emp in data  %}
+					<tr>
+						<td>
+							<input type="radio"  name="check" value="{{ emp.day }}/{{ emp.eid }}/{{ emp.start }}">
+						</td>
+						<td>{{ emp.day }}</td>
+						<td>{{ emp.startfix }}</td>
+						<td>{{ emp.endfix }}</td>
+						<td>{{ emp.reason }}</td>
+					</tr>
+                {% endfor %}
+				</tbody>
+			</table>
+
+			<ul>
+				 <input type="submit" name="submit" value="Edit Unavailable Time">
+                <input type="hidden" name="id" value="{{ id }}">
+                <input type="submit" name="submit" value="Create Unavailable Time">
+                <input type="submit" name="submit" value="Delete Unavailable Time">
+			</ul>
+             </form>
+		</div>
+	</main>
+</body>
+
+</html>

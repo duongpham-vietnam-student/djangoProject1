@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Register</title>
+	<meta name="description" content="Registration Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css'%}">
+
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<body>
+    {% if status  == 1 %}
+    <h1> Your request has been received. Please check your email for login information. </h1>
+    {% elif status  == 0 %}
+    <h1> Registration failed because the email you used already exists. </h1>
+    {% endif %}
+    <a href =" {% url 'login:index' %}">
+        Click to return login page!
+    </a>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Employee Editor</title>
+	<meta name="description" content="Edit Employee Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+
+	<link rel="stylesheet" href="{% static 'main.css' %}">
+	<script src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<header>
+	<nav id="nav_main">
+        <form id="back" method="post" action="{% url 'user:setup' %}">
+                {% csrf_token %}
+              <input type="submit" name="empl" value="Back">
+              <input type="hidden" name="id" value={{ id }} >
+
+        </form>
+	</nav>
+</header>
+<body>
+	<main>
+        <form method="post" action="{% url 'schedule:edit_create_assi' %}">
+            {% csrf_token %}
+		<div class="large">
+
+			<div class="editemploy">
+				<div class="editemployrow">
+					<h2>Task name:</h2>
+					<input type="text"  name="taskname" value="{{ data.taskName }}">
+				</div>
+				<div class="editemployrow">
+					<h2>Start time :</h2>
+					<input type="text"  name="start" value="{{ data.start_fix }}">
+				</div>
+                <div class="editemployrow">
+					<h2>End time :</h2>
+					<input type="text"  name="end" value="{{ data.end_fix}}">
+				</div>
+				<div class="editemployrow">
+					<h2>Min Title Brigade:</h2>
+					<select name="title" id="brtitle">
+						<option value="4">Kitchen Leader</option>
+						<option value="3">Sous Chef</option>
+						<option value="2">Line Cook</option>
+						<option value="1">Junior Cook</option>
+						<option value="0">Dishwasher</option>
+					</select>
+				</div>
+				<div class="editemployrow">
+					<h2>Tag:</h2>
+					<select name="tag" id="brtitle">
+						<option value="AM">AM</option>
+						<option value="PM">PM</option>
+                    </select>
+				</div>
+
+			</div>
+			<ul>
+                <input type="hidden" name="id" value="{{ id }}">
+                <input type="hidden" name="old" value="{{ data.taskName }}/{{ data.tag }}">
+                <input type="submit" value="Accept Edit" name="submit">
+			</ul>
+		</div>
+        </form>
+	</main>
+</body>
+
+</html>

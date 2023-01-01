@@ -1,0 +1,48 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Requests</title>
+	<meta name="description" content="Active Requests Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{% static 'main.css' %}">
+
+	<script type="text/javascript" src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<header>
+
+	<nav id="nav_main">
+        <form id="sett" method="post" action="{% url 'user:setting' %}" class="right">
+            {% csrf_token %}
+              <input type="submit" name="setting" value="Back" class="right current">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+
+	</nav>
+</header>
+<body>
+	<main>
+            <form id="setup" method="post" action="{% url 'user:navi' %}">
+                {% csrf_token %}
+            <ul>
+                <input type="hidden" name="id" value= {{ id }}>
+				<input type="submit"  name="check" value="Setup Employee" >
+                <br>
+                <input type="submit"  name="check" value="Setup Assignment" >
+                <br>
+                <input type="submit"  name="check" value="Setup Shift" >
+            </ul>
+             </form>
+	</main>
+</body>
+
+</html>
