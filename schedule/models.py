@@ -205,7 +205,7 @@ def check_critia(a):
                 penalty += 3
             if Employees[i].minhour > cost[i] + 6 or Employees[i].maxhour < cost[i] - 6:
                 penalty += 7
-    if (penalty < 10 and sum < 3):
+    if (penalty < 10 and sum < 4):
 
         return 1
     else:
