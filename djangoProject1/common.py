@@ -66,6 +66,7 @@ def tit_s(self):
     elif self == "0":
         return "Dishwasher"
 def shift_rank(day, tag):
+    #gan 1 con so dai dien cho ca lam viec, dung de sap xep theo thu tu thoi gian
     if day == "Mon" and tag == "AM":
          return 0
     if day == "Mon" and tag == "PM":
@@ -94,7 +95,9 @@ def shift_rank(day, tag):
         return 12
     if day == "Sun" and tag == "PM":
         return 13
+
 def re_day_range(num):
+    #tu trong so tim ra ca lam viec: 5
     if num // 2 == 0:
         day = "Mon"
     elif num // 2 == 1:

@@ -11,7 +11,9 @@ def login(request):
     if request.method == "POST":
         username = str(request.POST['username'])
         password = str(request.POST['password'])
-        print(MigrateDataBOAUser())
+        MigrateDataBOAUser() #lay data tu database
+        #database
+        #username, password
         for x in BOAUsers:
             if x.username == username and x.password == password:
                 if x.typefix == "ROOT":

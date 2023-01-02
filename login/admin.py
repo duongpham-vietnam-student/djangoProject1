@@ -1,3 +1,5 @@
-from django.contrib import admin
+"""
 
-# Register your models here.
+Flow: Frontend1 -> urls -> views -> models -> Frontend2
+
+"""
