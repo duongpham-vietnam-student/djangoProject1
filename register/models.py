@@ -97,7 +97,7 @@ def checkRegisterEmail(request):
 def CreateRegistrationUser(email, usertype):
     if checkRegisterEmail(email) == True:
         return False
-    type = tranferUsertype(usertype)
+    type = int(usertype)
     username, password = Create_Credential(email)
     data = HookData("DATABASE")
     try:
