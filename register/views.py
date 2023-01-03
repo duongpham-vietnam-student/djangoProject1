@@ -14,8 +14,8 @@ def index(request):
     return render(request, 'register/base.html')
 def save(request):
     if request.method == "POST":
-            email = request.POST['email_ros']
-            user_data_type = request.POST['usertype']
+            email = str(request.POST['email_ros'])
+            user_data_type = int(request.POST['usertype'])
             status = CreateRegistrationUser(email, user_data_type)
             context = {'status': status}
     return render(request, 'register/result.html', context)

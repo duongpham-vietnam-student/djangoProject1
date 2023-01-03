@@ -13,13 +13,13 @@ def HookData(request):
 
     return dict(config.items(request))
 def tranferUsertype(request):
-    if request >= 3:
+    if int(request) >= 3:
         return "ROOT"
-    elif request == 2:
+    elif int(request) == 2:
         return "ADMIN"
-    elif request == 1:
+    elif int(request) == 1:
         return "ASSISTANT"
-    elif request == 0:
+    elif int(request) == 0:
         return "USER"
 def re_tranferUsertype(request):
     if request.upper() == "ROOT":
