@@ -18,24 +18,9 @@
 
 <header>
 	<nav id="nav_main">
-        <form id="empl" method="post" action="{% url 'user:employee' %}">
-                {% csrf_token %}
-              <input type="button" name="empl" value="Employee">
-              <input type="hidden" name="id" value={{ id }} >
-        </form>
-        <form id="edit" method="post" action="{% url 'user:edit' %}">
+        <form id="sett" method="post" action="{% url 'user:setting' %}" class="right">
             {% csrf_token %}
-              <input type="submit" name="edit" value="Schedule">
-              <input type="hidden" name="id" value={{ id }} >
-        </form>
-        <form id="requ" method="post" action="{% url 'user:request' %}">
-            {% csrf_token %}
-              <input type="submit" name="request" value="Request">
-              <input type="hidden" name="id" value={{ id }} >
-        </form>
-        <form id="sett" method="post" action="{% url 'user:setting' %}">
-            {% csrf_token %}
-              <input type="submit" name="setting" value="Setting">
+              <input type="submit" name="setting" value="Back" class="right current">
               <input type="hidden" name="id" value={{ id }} >
         </form>
 	</nav>
