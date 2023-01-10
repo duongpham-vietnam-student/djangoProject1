@@ -6,8 +6,8 @@ config_object = ConfigParser()
 config_object["DATABASE"] = {
                                   "user": "admin1",
                                   "password": "1234567",
-                                  "host": "4.tcp.ngrok.io", #local
-                                  "port": "17339",
+                                  "host": "0.tcp.ngrok.io", #local
+                                  "port": "12460",
                                   "database": "BOAProject"
                                 }
 config_object["SENDMAIL"] = {
