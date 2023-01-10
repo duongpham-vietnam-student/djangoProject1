@@ -44,12 +44,11 @@ class Assignment():         #class này lấy dữ liệu từ bảng asignment 
         self.min_title = min_title  # min title can handle this assigment, value: 1, 2, 3, ...
         self.min_title_fix = tit_s(self.min_title)
         self.tag = tag  # AM or PM
-        self.cost = (int(self.end) - int(self.start)) / 100  # chi phí thời gian làm việc,đơn vị hour
+        self.cost = (int(self.end) - int(self.start)) / 100  #thời gian làm việc,đơn vị hour
 class ShiftAssignment():        #class này không có trong DB, nhưng nó được tạo ra để làm cầu nối cho Asignment và Shift
     def __init__(self, numberEmployee, assignment):
         self.number = numberEmployee             #number employee needed for task
         self.assignment = assignment                      #Class Assignment
-
 class Shift():                  #class này lấy dữ liệu từ bảng Shift trong DB
     def __init__(self, day, tag):
         self.day = day  # day of week: Mon, Tue, Wed,...
@@ -61,13 +60,12 @@ class Shift():                  #class này lấy dữ liệu từ bảng Shift 
         texts = list()
         for temp in text1:    #text1 = [["Line=3"], ["Dishwasher=0"],...]]
             text2 = temp.split('=')
-            texts.append(text2)
+            texts.append(text2) #text2 = ["Lỉne", 3]
         for y in texts:
             for x in Assignments:
                 if x.taskName == y[0] and x.tag==tag:
                     sa = ShiftAssignment(int(y[1]), x)
                     self.shift_assignment.append(sa)
-
     #check two function
     def minShift(self):
         min = 5
@@ -83,17 +81,20 @@ class Shift():                  #class này lấy dữ liệu từ bảng Shift 
         return max
     #...
 def shift_assignment_config(a):
+    #a la shift_asign
     li = []
     for i in a.shift_assignment:
         li.append(i.assignment.taskName)
     return li
-def shift_config():
+def shift_config(): #sap xep shift theo thu tu
     MigrateData()
+
     num, lis = Assignment_fill()
     lis_fix = list(dict.fromkeys(lis))
 
     li = sorted(Shifts, key = take_point)
     data = []
+
     for i in li:
         lis_com = shift_assignment_config(i)
         temp = []
@@ -109,12 +110,12 @@ def shift_config():
 
     return lis_fix, data
 
-def convertData():              #function này tạo ra ma trận những ngày có thể làm việc của các nhân viên
+def convertData():              # Buoc 2 function này tạo ra ma trận những ngày có thể làm việc của các nhân viên
     res = list()
     for e in Employees:
         temp = [int(e.title)] * len(Shifts)      #tạm thời cho tất cả đều có khả năng work mọi ca
         res.append(temp)
-    i = 0
+    i = 0 #b2
     j = 0
     for e in Employees:
         for s in Shifts:
@@ -127,9 +128,9 @@ def convertData():              #function này tạo ra ma trận những ngày 
                     if s.day==u.day and a.start>=u.start and a.end<=u.end:
                         res[i][j] = -1   # không thể work
             j+=1    #j đại diện cho ca làm, +1 cuối lệnh for của shift
-        j=0         #reset lại với employ khác
+        j=0         #reset shift voi employ khác
         i+=1        #+1 cho mỗi employee
-    return res
+    return res #/b2
 def returnESR(a):       #này để chỉnh dữ liệu thôi
         return str(a).split("-")
 def CheckE2(y, li):
@@ -147,10 +148,10 @@ def divide_Assignments():
         else:
             Assignments_PM.append(i)
     return Assignments_AM, Assignments_PM
-def poss_day(s, all): #Step 3
+def poss_day(s, all): #Step 3    # tao ra 1 buoi lam viec hoan hao
     am, pm = divide_Assignments()
     if Shifts[int(s)].tag == "AM":
-        req = [0] * len(am)
+        req = [0] * len(am)     #[0, 0, 0, 0]
         req_com = [0] * len(am)
     else:
         req = [0] * len(pm)
@@ -186,6 +187,7 @@ def poss_day(s, all): #Step 3
             break
     return li
 def em_cost(a):
+    #a la nhan (e, s: shift ca lam, r: assignment)
     s = int(a[1])
     num, li = Assignment_fill()
     lis = list(li)
@@ -193,7 +195,7 @@ def em_cost(a):
     for i in Assignments:
         if i.taskName == lis[r] and i.tag == Shifts[s].tag:
             return i.cost
-def check_critia(a):
+def check_critia(a): #b4
     cost = push_critia(a)
     penalty = 0
     sum = 0
@@ -206,7 +208,6 @@ def check_critia(a):
             if Employees[i].minhour > cost[i] + 6 or Employees[i].maxhour < cost[i] - 6:
                 penalty += 7
     if (penalty < 10 and sum < 4):
-
         return 1
     else:
         return 0
@@ -221,18 +222,18 @@ def Assignment_fill():
         li.append(i.taskName)
     li = dict.fromkeys(li)
     return len(li), li
-def schedule():
+def schedule(): #buoc 1
     model = cp_model.CpModel()
     shift = {}
     all_list = []
     poss_list = []
     week_list = []
-    role, li = Assignment_fill()
+    role, li = Assignment_fill() #b1
     for e in range(len(Employees)):
         for s in range(len(Shifts)):
             for r in range(role):
                 shift[(e, s, r)] = model.NewBoolVar('%i-%i-%i' % (e, s, r))
-                all_list.append(shift[(e, s, r)])
+                all_list.append(shift[(e, s, r)]) #/b1
     stop = 0
     while (stop == 0):
         for s in range(len(Shifts)):

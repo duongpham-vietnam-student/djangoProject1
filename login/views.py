@@ -6,7 +6,7 @@ from login.models import *
 import time
 # Create your views here.
 def index(request):
-    return render(request, 'login/login.html')
+    return render(request, 'login/login.html') #trang login chua nhap gi vao
 def login(request):
     if request.method == "POST":
         username = str(request.POST['username'])
@@ -27,25 +27,3 @@ def login(request):
                 return render(request, 'user/settings.html', context)
         context = {'login':1}
         return render(request, 'login/result.html', context)
-def forgot(request):
-    username = str(request.POST['username'])
-    MigrateDataBOAUser()
-    for i in BOAUsers:
-        if i.email == username:
-            sec = time.time()
-            ResetRequestAccount()
-            check = RequestAccount("e", username)
-            temp, pass_code = Create_Credential(username)
-            dataset = (username, sec, pass_code)
-            if check==0:
-                RequestAccount("i", dataset)
-            elif check==1:
-                RequestAccount("d", (username,))
-                RequestAccount("i", dataset)
-            context = {'has_account': 1, }
-            return render(request, 'login/result.html', context)
-    context = {'no_account':1}
-    return render(request, 'login/result.html', context)
-def forgot_code(request):
-    code = str(request.POST['code'])
-
