@@ -87,8 +87,8 @@ DATABASES = {
        'NAME': 'BOAProject',
        'USER': 'admin1',
        'PASSWORD': '1234567',
-       'HOST': 'localhost',
-       'PORT': '5433',
+       'HOST': '4.tcp.ngrok.io:',
+       'PORT': '17339',
     }
 }
 db_from_env = dj_database_url.config(conn_max_age=600)
