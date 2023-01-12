@@ -4,7 +4,7 @@
 <head>
     {% load static %}
 	<meta charset="utf-8">
-	<title>FGS - Assignment Editor</title>
+	<title>FGS - Employee Unavailabla Time Editor</title>
 	<meta name="description" content="Edit Employee Page">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -30,45 +30,50 @@
 </header>
 <body>
 	<main>
-        <form method="post" action="{% url 'schedule:edit_create_assi' %}">
+        <form method="post" action="{% url 'schedule:edit_create_unav' %}">
             {% csrf_token %}
 		<div class="large">
 
 			<div class="editemploy">
 				<div class="editemployrow">
-					<h2>Task name:</h2>
-					<input type="text"  name="taskname">
+					<h2>Employee ID: {{ eid }}</h2>
+
 				</div>
 				<div class="editemployrow">
-					<h2>Start time(military time):</h2>
-					<input type=text name="start" >
+					<h2>Name: {{ name }}</h2>
+
 				</div>
                 <div class="editemployrow">
-					<h2>End time(military time):</h2>
-                    <input type=text name="end" >
-				</div>
-				<div class="editemployrow">
-					<h2>Min Title Brigade:</h2>
-					<select name="title" id="brtitle">
-						<option value="4">Kitchen Leader</option>
-						<option value="3">Sous Chef</option>
-						<option value="2">Line Cook</option>
-						<option value="1">Junior Cook</option>
-						<option value="0">Dishwasher</option>
+					<h2>Day: </h2>
+					<select name="day" id="brtitle">
+						<option value="Mon">Monday</option>
+						<option value="Tue">Tuesday</option>
+						<option value="Wed">Wednesday</option>
+						<option value="Thu">Thursday</option>
+						<option value="Fri">Friday</option>
+                        <option value="Sat">Saturday</option>
+                        <option value="Sun">Sunday</option>
 					</select>
 				</div>
+                <div class="editemployrow">
+					<h2>Reason:</h2>
+					<input type="text"  value="{{ data.reason }}" name="reason" >
+				</div>
 				<div class="editemployrow">
-					<h2>Tag:</h2>
-					<select name="tag" id="brtitle">
-						<option value="AM">AM</option>
-						<option value="PM">PM</option>
-                    </select>
+					<h2>Time start (military time):</h2>
+					<input type="text"  value="{{ data.start }}" name="start" >
+				</div>
+				<div class="editemployrow">
+					<h2>Max Hours (military time):</h2>
+					<input type="text" value="{{ data.end }}" name="end" >
 				</div>
 
 			</div>
 			<ul>
                 <input type="hidden" name="id" value="{{ id }}">
-                <input type="submit" value="Accept Create" name="submit">
+                 <input type="hidden" name="eid" value="{{ eid }}">
+                <input type="hidden" name="old" value="{{ data.eid }}/{{ data.day }}/{{ data.start }}">
+                <input type="submit" value="Accept Edit" name="submit">
 			</ul>
 		</div>
         </form>

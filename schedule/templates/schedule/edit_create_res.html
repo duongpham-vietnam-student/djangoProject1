@@ -35,6 +35,12 @@
     {% if fail %}
         <h1> Opps! Something went wrong! </h1>
     {% endif %}
+     {% if create_unav_done %}
+        <h1> The new Unavailable Time create success! </h1>
+        {% endif %}
+    {% if edit_unav_done %}
+        <h1> The Unavailable Time data fix success! </h1>
+        {% endif %}
     <form action="{% url 'user:setup' %}" method="post">
                     {% csrf_token %}
         <input type="hidden" name="id" value={{ id }} >

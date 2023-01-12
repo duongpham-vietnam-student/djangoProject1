@@ -21,26 +21,13 @@
 <header>
 
 	<nav id="nav_main">
-        <form id="empl" method="post" action="{% url 'user:setup' %}" class="left">
-                {% csrf_token %}
-              <input type="submit" name="empl" value="Employee" class="left">
-              <input type="hidden" name="id" value={{ id }} >
-        </form>
-        <form id="edit" method="post" action="{% url 'schedule:index' %}">
-            {% csrf_token %}
-              <input type="submit" name="edit" value="Schedule" class="current">
-              <input type="hidden" name="id" value={{ id }} >
-        </form>
-        <form id="requ" method="post" action="{% url 'user:request' %}">
-            {% csrf_token %}
-              <input type="submit" name="request" value="Request" class="">
-              <input type="hidden" name="id" value={{ id }} >
-        </form>
         <form id="sett" method="post" action="{% url 'user:setting' %}" class="right">
             {% csrf_token %}
-              <input type="submit" name="setting" value="Setting" class="right">
-              <input type="hidden" name="id" value="{ id }}" >
+              <input type="submit" name="setting" value="Back" class="right">
+              <input type="hidden" name="id" value={{ id }} >
         </form>
+
+
 	</nav>
 </header>
 <body>

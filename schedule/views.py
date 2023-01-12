@@ -91,7 +91,7 @@ def edit_create_employ(request):
                 context = {'id':id, 'data': i.UnavailableTime, 'name':name, 'eid':eid}
                 return render(request, 'schedule/unavailabletime.html', context)
         return render(request, 'schedule/unavailabletime.html', context)
-    unvai('1118')
+
 def editempl(request):
     id = str(request.POST['id'])
 
@@ -132,6 +132,7 @@ def editassi(request):
         check_fix = check.split("/")
         dataset = (check_fix[0], check_fix[1])
         DeleteValue("a", dataset)
+        UpdateShiftDel(check_fix[0])
         MigrateData()
         context = {'id': id, 'data': Assignments}
         return render(request, 'schedule/assignment.html', context)
@@ -148,6 +149,7 @@ def edit_create_assi(request):
         status = AddValue("a", dataset)
         if status==1:
             context = {'create_assi_done':1, 'id':id}
+            UpdateShift()
         else:
             context = {'fail': 1, 'id': id}
         return render(request, 'schedule/edit_create_res.html', context)
@@ -222,37 +224,43 @@ def edit_create_shift(request):
 
 def editunav(request):
     id = str(request.POST['id'])
+    eid = str(request.POST['eid'])
+    name = str(request.POST['name'])
     submit = str(request.POST['submit'])
-    if submit == "Edit Assignment":
+    if submit == "Edit Unavailable Time":
         check = str(request.POST['check'])
         s = check.split("/")
         MigrateData()
-        for i in Assignments:
-            if str(i.taskName) == s[0] and i.tag == s[1]:
-                context = {'data': i, 'id': id}
-                return render(request, 'schedule/editassign.html', context)
-    elif submit == "Create Unavailable":
-        context = {'id': id}
+        for i in Employees:
+            if str(i.eid) == s[0]:
+                for j in i.UnavailableTime:
+                    if str(j.day) == s[1] and str(j.start) == s[2]:
+                        context = {'data': j, 'id': id, 'eid': eid, 'name': name}
+                        return render(request, 'schedule/editunav.html', context)
+    elif submit == "Create Unavailable Time":
+        context = {'id': id, 'eid': eid, 'name': name}
         return render(request, 'schedule/addunvai.html', context)
-    elif submit == "Delete Assignment":
+    elif submit == "Delete Unavailable Time":
         check = str(request.POST['check'])
         check_fix = check.split("/")
-        dataset = (check_fix[0], check_fix[1])
-        DeleteValue("a", dataset)
+        dataset = (check_fix[0], check_fix[1], check_fix[2])
+        DeleteValue("u", dataset)
         MigrateData()
-        context = {'id': id, 'data': Assignments}
-        return render(request, 'schedule/assignment.html', context)
+        for i in Employees:
+            if str(i.eid) == eid:
+                context = {'id':id, 'data': i.UnavailableTime, 'name':name, 'eid':eid}
+                return render(request, 'schedule/unavailabletime.html', context)
 def edit_create_unav(request):
     id = str(request.POST['id'])
     submit = str(request.POST['submit'])
-    taskname = str(request.POST['taskname'])
+    eid = str(request.POST['eid'])
     start = str(request.POST['start'])
     end = str(request.POST['end'])
-    min_title = int(request.POST['title'])
-    tag = str(request.POST['tag'])
+    reason = str(request.POST['reason'])
+    day = str(request.POST['day'])
     if submit == "Accept Create":
-        dataset = (taskname, start, end, min_title, tag)
-        status = AddValue("a", dataset)
+        dataset = (eid, day, reason, start, end)
+        status = AddValue("u", dataset)
         if status==1:
             context = {'create_unav_done':1, 'id':id}
         else:
@@ -261,8 +269,8 @@ def edit_create_unav(request):
     elif submit == "Accept Edit":
         old = str(request.POST['old'])
         old_s = old.split("/")
-        dataset = (taskname, start, end, min_title, tag, old_s[0], old_s[1])
-        status = EditValue("a", dataset)
+        dataset = (eid, day, reason, start, end, old_s[0], old_s[1], old_s[2])
+        status = EditValue("u", dataset)
         if status == 1:
             context = {'edit_unav_done': 1, 'id': id}
         else:

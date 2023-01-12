@@ -88,13 +88,10 @@ def shift_assignment_config(a):
     return li
 def shift_config(): #sap xep shift theo thu tu
     MigrateData()
-
     num, lis = Assignment_fill()
     lis_fix = list(dict.fromkeys(lis))
-
     li = sorted(Shifts, key = take_point)
     data = []
-
     for i in li:
         lis_com = shift_assignment_config(i)
         temp = []
@@ -107,9 +104,7 @@ def shift_config(): #sap xep shift theo thu tu
                 if lis_fix[j]==k.assignment.taskName:
                      temp.append(k.number)
         data.append(temp)
-
     return lis_fix, data
-
 def convertData():              # Buoc 2 function này tạo ra ma trận những ngày có thể làm việc của các nhân viên
     res = list()
     for e in Employees:
@@ -125,7 +120,7 @@ def convertData():              # Buoc 2 function này tạo ra ma trận nhữn
             # code check xem nhân viên đó có bận không? 4 dòng
             for a in Assignments:
                 for u in e.UnavailableTime:
-                    if s.day==u.day and a.start>=u.start and a.end<=u.end:
+                    if (s.day==u.day and a.start>=u.start) or (s.day==u.day and a.end<=u.end):
                         res[i][j] = -1   # không thể work
             j+=1    #j đại diện cho ca làm, +1 cuối lệnh for của shift
         j=0         #reset shift voi employ khác
@@ -139,23 +134,12 @@ def CheckE2(y, li):
         if y2[0] == x[0] and y2[2] != x[2]:
             return 1
     return 0
-def divide_Assignments():
-    Assignments_AM = list()
-    Assignments_PM = list()
-    for i in Assignments:
-        if i.tag=="AM":
-            Assignments_AM.append(i)
-        else:
-            Assignments_PM.append(i)
-    return Assignments_AM, Assignments_PM
 def poss_day(s, all): #Step 3    # tao ra 1 buoi lam viec hoan hao
-    am, pm = divide_Assignments()
-    if Shifts[int(s)].tag == "AM":
-        req = [0] * len(am)     #[0, 0, 0, 0]
-        req_com = [0] * len(am)
-    else:
-        req = [0] * len(pm)
-        req_com = [0] * len(pm)
+    num, l = Assignment_fill()
+    lis = list(l)
+
+    req = [0] * num     #[0, 0, 0, 0]
+    req_com = [0] * num
     li = []
     poss_list = []
     choi = []
@@ -169,11 +153,11 @@ def poss_day(s, all): #Step 3    # tao ra 1 buoi lam viec hoan hao
         j = int(a[1])
         k = int(a[2])
         if h[i][j] == -1 or int(Employees[i].title) < int(Shifts[j].shift_assignment[k].assignment.min_title):
-            poss_list.remove(x)
-
+                poss_list.remove(x)
     temp1 = Shifts[int(s)].shift_assignment
-    for x in temp1:
-        req[temp1.index(x)] = int(x.number)
+    for x in range(len(temp1)):
+        req[x] = int(temp1[x].number)
+    print(req)
     for i in range(len(poss_list)):
         choi.append(i)
     while len(choi)>1:
@@ -207,7 +191,7 @@ def check_critia(a): #b4
                 penalty += 3
             if Employees[i].minhour > cost[i] + 6 or Employees[i].maxhour < cost[i] - 6:
                 penalty += 7
-    if (penalty < 10 and sum < 4):
+    if (penalty < 12 and sum < 5):
         return 1
     else:
         return 0
@@ -222,6 +206,7 @@ def Assignment_fill():
         li.append(i.taskName)
     li = dict.fromkeys(li)
     return len(li), li
+
 def schedule(): #buoc 1
     model = cp_model.CpModel()
     shift = {}
@@ -231,7 +216,7 @@ def schedule(): #buoc 1
     role, li = Assignment_fill() #b1
     for e in range(len(Employees)):
         for s in range(len(Shifts)):
-            for r in range(role):
+            for r in range(len(Shifts[s].shift_assignment)):
                 shift[(e, s, r)] = model.NewBoolVar('%i-%i-%i' % (e, s, r))
                 all_list.append(shift[(e, s, r)]) #/b1
     stop = 0
@@ -480,7 +465,7 @@ def EditValue(command, dataset):
             # Create a cursor to perform database operations
             cursor = connection.cursor()
             # Executing a SQL query
-            query = """update unavailabletime set eid=%s, day_of_week=%s, reason=%s, time_start=%s, time_end=%s where eid=%s"""
+            query = """update unavailabletime set eid=%s, day_of_week=%s, reason=%s, time_start=%s, time_end=%s where eid=%s and day_of_week=%s and time_start=%s"""
             dataset_fix = tuple(dataset)
             cursor.execute(query, dataset_fix)
             connection.commit()
@@ -575,7 +560,7 @@ def DeleteValue(command, dataset):
             # Create a cursor to perform database operations
             cursor = connection.cursor()
             # Executing a SQL query
-            cursor.execute("delete from unavailable where eid=%s", dataset)
+            cursor.execute("delete from unavailabletime where eid=%s and day_of_week=%s and time_start=%s", dataset)
             connection.commit()
             return 1
         except (Exception, Error) as error:
@@ -605,16 +590,12 @@ def DeleteValue(command, dataset):
 def take_point(a):
     return a.rank
 def change(s):
-    if s == 0 :
-        return "Dishwasher"
-    elif s==1:
-        return "Line"
-    elif s==2:
-        return "Prep"
-    elif s==3:
-        return "Expo"
-    elif s==-1:
+    MigrateData()
+    num, l = Assignment_fill()
+    la = list(l)
+    if int(s)==-1:
         return "No work"
+    return la[int(s)]
 def show_assignment():
     MigrateData()
     li = sorted(Shifts, key= take_point)
@@ -632,9 +613,39 @@ def show_assignment():
         number_week.append(number_day)
         number_day = [0] * len(li)
     return number_week
-
-
-
+def UpdateShift():
+    MigrateData()
+    num, l = Assignment_fill()
+    lis = list(l)
+    for i in Shifts:
+        temp = []
+        des = ""
+        for j in i.shift_assignment:
+            temp.append(j.assignment.taskName)
+            des = des + j.assignment.taskName + "=" + str(j.number) + ","
+        if lis[num-1] not in temp:
+            des = des + lis[num-1] + "=" + "0" + ","
+        data = (des, i.day, i.tag)
+        EditValue("s", data)
+def UpdateShiftDel(name):
+    MigrateData()
+    count = 0
+    for i in Assignments:
+        if i.taskName==name:
+            count+=1
+    if count==2:
+        return 1
+    for i in Shifts:
+        des = ""
+        for j in i.shift_assignment:
+            if j.assignment.taskName==name:
+                i.shift_assignment.remove(j)
+        for j in i.shift_assignment:
+            des = des + j.assignment.taskName + "=" + str(j.number) + ","
+        data = (des, i.day, i.tag)
+        EditValue("s", data)
+MigrateData()
+print(schedule())
 
 
 
