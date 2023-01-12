@@ -58,9 +58,11 @@ class Shift():                  #class này lấy dữ liệu từ bảng Shift 
     def setShift(self, tag, text):  # a method to add ShiftAssignment to Shift
         text1 = text.split(',')  #trong DB, được mô tả dưới dạng 1 chuỗi text, có dạng Line=3,Dishwasher=0,...
         texts = list()
+
         for temp in text1:    #text1 = [["Line=3"], ["Dishwasher=0"],...]]
             text2 = temp.split('=')
             texts.append(text2) #text2 = ["Lỉne", 3]
+
         for y in texts:
             for x in Assignments:
                 if x.taskName == y[0] and x.tag==tag:
@@ -166,7 +168,7 @@ def poss_day(s, all): #Step 3    # tao ra 1 buoi lam viec hoan hao
         z = int(returnESR(poss_list[val])[2])
         if CheckE2(poss_list[val], li) == 0 and req[z] > 0:
             li.append(returnESR(poss_list[val]))
-        req[z] = req[z] - 1
+            req[z] = req[z] - 1
         if req == req_com:
             break
     return li
@@ -409,33 +411,33 @@ def AddValue(command, dataset):
                 connection.close()
 def choose_Query_Schedule(day, tag):
     if day=='Mon' and tag=='AM':
-        return "update schedule set monam=%s where eid=%s"
+        return "update schedule set monam=%s, c_hour=%s where eid=%s"
     if day=='Mon' and tag=='PM':
-        return "update schedule set monpm=%s where eid=%s"
+        return "update schedule set monpm=%s, c_hour=%s where eid=%s"
     if day=='Tue' and tag=='AM':
-        return "update schedule set tueam=%s where eid=%s"
+        return "update schedule set tueam=%s, c_hour=%s where eid=%s"
     if day=='Tue' and tag=='PM':
-        return "update schedule set tuepm=%s where eid=%s"
+        return "update schedule set tuepm=%s, c_hour=%s where eid=%s"
     if day=='Wed' and tag=='AM':
-        return "update schedule set wedam=%s where eid=%s"
+        return "update schedule set wedam=%s, c_hour=%s where eid=%s"
     if day=='Wed' and tag=='PM':
-        return "update schedule set wedpm=%s where eid=%s"
+        return "update schedule set wedpm=%s, c_hour=%s where eid=%s"
     if day=='Thu' and tag=='AM':
-        return "update schedule set thuam=%s where eid=%s"
+        return "update schedule set thuam=%s, c_hour=%s where eid=%s"
     if day=='Thu' and tag=='PM':
-        return "update schedule set thupm=%s where eid=%s"
+        return "update schedule set thupm=%s, c_hour=%s where eid=%s"
     if day=='Fri' and tag=='AM':
-        return "update schedule set friam=%s where eid=%s"
+        return "update schedule set friam=%s, c_hour=%s where eid=%s"
     if day=='Fri' and tag=='AM':
-        return "update schedule set fripm=%s where eid=%s"
+        return "update schedule set fripm=%s, c_hour=%s where eid=%s"
     if day=='Sat' and tag=='AM':
-        return "update schedule set satam=%s where eid=%s"
+        return "update schedule set satam=%s, c_hour=%s where eid=%s"
     if day=='Sat' and tag=='AM':
-        return "update schedule set satpm=%s where eid=%s"
+        return "update schedule set satpm=%s, c_hour=%s where eid=%s"
     if day=='Sun' and tag=='AM':
-        return "update schedule set sunam=%s where eid=%s"
+        return "update schedule set sunam=%s, c_hour=%s where eid=%s"
     if day=='Sun' and tag=='PM':
-        return "update schedule set sunpm=%s where eid=%s"
+        return "update schedule set sunpm=%s, c_hour=%s where eid=%s"
 def EditValue(command, dataset):
     data = HookData("DATABASE")
 
@@ -516,22 +518,55 @@ def EditValue(command, dataset):
                 connection.close()
         return 0
     elif command=="sch":
+        MigrateData()
         try:
             # Connect to an existing database
             connection = psycopg2.connect(**data)
             # Create a cursor to perform database operations
             cursor = connection.cursor()
+            cursor1 = connection.cursor()
             # Executing a SQL query
+            cursor1.execute("select * from schedule where eid=%s", (dataset[4],))
+            record = cursor1.fetchone()
+
+            i = shift_rank(dataset[0], dataset[1])
+            tem = int(record[1+i])
+
+            num, l = Assignment_fill()
+            lis = list(l)
+            find = lis[tem]
+            old = 0
+            new = 0
+            if tem == -1:
+                old = 0
+            else:
+                for i in Assignments:
+                    if i.taskName==find and i.tag == dataset[1]:
+                        old = i.cost
+            check = dataset[3] - 1
+            if check == -1:
+                new = 0
+            else:
+                for i in Assignments:
+                    if i.taskName == dataset[2] and i.tag == dataset[1]:
+                        new = i.cost
+
+            cost = int(record[15])
+
+            cost = cost - old + new
+
             query = choose_Query_Schedule(dataset[0], dataset[1])
-            dataset_fix = tuple(dataset[2:])
+            dataset_fix = tuple([check, int(cost), dataset[4]])
             cursor.execute(query, dataset_fix)
             connection.commit()
             return 1
         except (Exception, Error) as error:
+            print("Fail here")
             return 0
         finally:
             if (connection):
                 cursor.close()
+                cursor1.close()
                 connection.close()
         return 0
 def DeleteValue(command, dataset):
@@ -593,7 +628,7 @@ def change(s):
     MigrateData()
     num, l = Assignment_fill()
     la = list(l)
-    if int(s)==-1:
+    if int(s)==-1 or s>=num:
         return "No work"
     return la[int(s)]
 def show_assignment():
@@ -606,10 +641,8 @@ def show_assignment():
     for k in range(num):
         for i in li:
             for j in i.shift_assignment:
-
                 if j.assignment.taskName == list_name_assignment[k]:
                     number_day[li.index(i)] = j.number
-
         number_week.append(number_day)
         number_day = [0] * len(li)
     return number_week
@@ -644,8 +677,7 @@ def UpdateShiftDel(name):
             des = des + j.assignment.taskName + "=" + str(j.number) + ","
         data = (des, i.day, i.tag)
         EditValue("s", data)
-MigrateData()
-print(schedule())
+
 
 
 

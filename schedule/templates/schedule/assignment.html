@@ -47,7 +47,7 @@
 					{% for emp in data  %}
 					<tr>
 						<td>
-							<input type="radio"  name="check" value="{{ emp.taskName }}/{{ emp.tag }}">
+							<input type="radio" checked="checked" name="check" value="{{ emp.taskName }}/{{ emp.tag }}">
 						</td>
 						<td>{{ emp.taskName }}</td>
 						<td>{{ emp.start_fix }}</td>

@@ -20,10 +20,9 @@
 </head>
 <header>
 	<nav id="nav_main">
-        <form id="sett" method="post" action="{% url 'user:setting' %}" class="right">
+        <form id="sett" method="post" action="{% url 'login:index' %}" class="right">
             {% csrf_token %}
               <input type="submit" name="setting" value="Back" class="right">
-              <input type="hidden" name="id" value="{{ id }}">
         </form>
 
 	</nav>
@@ -71,17 +70,7 @@
 
 				</tbody>
 			</table>
-            <ul class="">
-                <form method="post" action="{% url 'schedule:generate' %}">
-                    {% csrf_token %}
-                    {% if mode %}
-                    <input type="submit" name="submit" value="Generate Schedule" >
-                    <input type="submit" name="submit" value="Manuel Edit">
-                    {% endif %}
-                    <input type="hidden" name="id" value="{{ id }}">
-                </form>
 
-            </ul>
 		</div>
 	</main>
 </body>

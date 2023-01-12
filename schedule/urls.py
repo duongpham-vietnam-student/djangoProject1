@@ -13,5 +13,7 @@ urlpatterns = [
     path('editshift/', views.editshift, name='editshift'),
     path('editcreateshift/', views.edit_create_shift, name='edit_create_shift'),
     path('editunav/', views.editunav, name='editunav'),
-    path('editcreateunav/', views.edit_create_unav, name='edit_create_unav')
+    path('editcreateunav/', views.edit_create_unav, name='edit_create_unav'),
+    path('manual/',views.manual, name='manual'),
+
 ]

@@ -1,10 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!doctype html>
+<html class="no-js" lang="">
 
+<head>
+    {% load static %}
+	<meta charset="utf-8">
+	<title>FGS - Employee Editor</title>
+	<meta name="description" content="Edit Employee Page">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="manifest" href="site.webmanifest">
+	<link rel="apple-touch-icon" href="icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+
+	<link rel="stylesheet" href="{% static 'main.css' %}">
+	<script src="{% static 'main.js' %}"></script>
+
+	<meta name="theme-color" content="#fafafa">
+</head>
+<header>
+	<nav id="nav_main">
+        <form id="back" method="post" action="{% url 'user:setup' %}">
+                {% csrf_token %}
+              <input type="submit" name="empl" value="Back">
+              <input type="hidden" name="id" value={{ id }} >
+
+        </form>
+	</nav>
+</header>
+<body>
+	<main>
+        <form method="post" action="{% url 'schedule:manual' %}">
+            {% csrf_token %}
+		<div class="large">
+
+			<div class="editemploy">
+				<div class="editemployrow">
+					<h2>Day:</h2>
+					<select name="day" >
+						<option value="Mon">Monday</option>
+						<option value="Tue">Tuesday</option>
+						<option value="Wed">Wednesday</option>
+						<option value="Thu">Thursday</option>
+						<option value="Fri">Friday</option>
+                        <option value="Sat">Saturday</option>
+                        <option value="Sun">Sunday</option>
+					</select>
+				</div>
+
+				<div class="editemployrow">
+					<h2>Tag:</h2>
+					<select name="tag" id="brtitle">
+						<option value="AM">AM</option>
+						<option value="PM">PM</option>
+                    </select>
+				</div>
+                <div class="editemployrow">
+					<h2>Employee:</h2>
+					<select name="emp" >
+                        {% for i in emp %}
+						<option value={{ i.eid }}>{{ i.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+                <div class="editemployrow">
+					<h2>Assignment:</h2>
+					<select name="assi" >
+                        {% for i in assi %}
+						<option value={{ i }}>{{ i }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<ul>
+                <input type="hidden" name="id" value="{{ id }}">
+
+                <input type="submit" value="Accept Edit" name="submit">
+			</ul>
+		</div>
+        </form>
+	</main>
 </body>
+
 </html>

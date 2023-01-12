@@ -2,12 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
 from schedule.models import *
-
+from register.models import *
+from login.models import *
 def index(request):
     id = str(request.POST['id'])
     s = list(MigrateSchedule())
     MigrateData()
-
     for i in range(len(s)):
         s[i] = list(s[i])
     for i in s:
@@ -29,7 +29,6 @@ def index(request):
         matrix.append(0)
         s.append(matrix)
     context = []
-
     for i in range(len(Employees)):
         temp = []
         context.append(temp)
@@ -48,16 +47,33 @@ def index(request):
         for j in range(len(Shifts)):
             temp.append(number_week[i][j])
         super_context.append(temp)
-    con = {'schedule': context, 'number_week': super_context, 'id':id}
+        con = {'schedule': context, 'number_week': super_context, 'id': id}
+    MigrateDataBOAUser()
+    for i in BOAUsers:
+        if str(i.id) == id:
+            temp = i
+    if int(temp.type) > 0:
+        con = {'schedule': context, 'number_week': super_context, 'id': id, 'mode':1}
     return render(request, 'schedule/schedule.html', con)
 # Create your views here.
+
+
 def generate(request):
     id = str(request.POST['id'])
-    s = create_schedule()
+
     context = {'id':id}
-    while 1:
-        if s == 1:
-            return render(request, 'schedule/res.html', context)
+    submit = str(request.POST['submit'])
+    if submit=="Generate Schedule":
+        while 1:
+            s = create_schedule()
+            if s == 1:
+                return render(request, 'schedule/res.html', context)
+    else:
+        MigrateData()
+        num, l = Assignment_fill()
+        assi = ["No work"] + list(l)
+        context ={'id':id, 'emp':Employees, 'assi':assi}
+        return render(request, 'schedule/manual.html', context)
 def edit_create_employ(request):
     id = str(request.POST['id'])
     submit = str(request.POST['submit'])
@@ -66,10 +82,14 @@ def edit_create_employ(request):
     title = int(request.POST['title'])
     minhour = int(request.POST['minhour'])
     maxhour = int(request.POST['maxhour'])
+    email = str(request.POST['e_mail'])
     if submit == "Accept Create":
         dataset = (eid, name, title, minhour, maxhour)
         status = AddValue("e", dataset)
         if status==1:
+            username, password = Create_Credential(email)
+            SendCredentialMail(email,username,password)
+            createBOAUser(eid, username, password, email, "0")
             context = {'create_empl_done':1, 'id':id}
         else:
             context = {'fail': 1, 'id': id}
@@ -276,6 +296,17 @@ def edit_create_unav(request):
         else:
             context = {'fail': 1, 'id': id}
         return render(request, 'schedule/edit_create_res.html', context)
-
-
+def manual(request):
+    id = str(request.POST['id'])
+    eid = str(request.POST['emp'])
+    day = str(request.POST['day'])
+    tag = str(request.POST['tag'])
+    assi = str(request.POST['assi'])
+    MigrateData()
+    num, l = Assignment_fill()
+    lis = ["No"] + list(l)
+    dataset = [day, tag, assi, lis.index(assi), eid]
+    EditValue("sch", dataset)
+    context = {'id':id, 'manual':1}
+    return render(request, 'schedule/edit_create_res.html', context)
 

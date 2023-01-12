@@ -48,7 +48,7 @@
 					{% for emp in data  %}
 					<tr>
 						<td>
-							<input type="radio"  name="check" value="{{ emp.eid }}/{{ emp.day }}/{{ emp.start }}">
+							<input type="radio" checked="checked" name="check" value="{{ emp.eid }}/{{ emp.day }}/{{ emp.start }}">
 						</td>
 						<td>{{ emp.day }}</td>
 						<td>{{ emp.startfix }}</td>

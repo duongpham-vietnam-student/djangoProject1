@@ -40,20 +40,22 @@ def requ(request):
         context = {'id': s, 'data': RegistrationRequests}
         return render(request, 'user/requests.html', context)
 def sett(request):
-    if request.method == "POST":
-        s = str(request.POST['id'])
+        id = str(request.POST['id'])
         MigrateDataBOAUser()
         for x in BOAUsers:
-            if str(x.id) == s:
+            if str(x.id) == id:
                 if x.typefix == "ROOT":
                     context = {'user': x, 'id': x.id, 'role': x.typefix, 'request_mode': 1, 'setup_mode': 1, 'edit_mod': 1}
+                    return render(request, 'user/settings.html', context)
                 elif x.typefix == "ADMIN":
                     context = {'user': x, 'id': x.id, 'role': x.typefix, 'setup_mode': 1, 'edit_mode': 1}
+                    return render(request, 'user/settings.html', context)
                 elif x.typefix == "ASSISTANT":
                     context = {'user': x, 'id': x.id, 'role': x.typefix, 'edit_mode': 1}
-                elif x.typefix == "EMPLOYEE":
+                    return render(request, 'user/settings.html', context)
+                elif x.typefix == "USER":
                     context = {'user': x, 'id': x.id, 'role': x.typefix}
-        return render(request, 'user/settings.html', context)
+                    return render(request, 'user/settings.html', context)
 def changeinfouser1(request):
     id = str(request.POST['id'])
     context = {'id':id}
@@ -78,12 +80,16 @@ def accept(request):
         id = str(request.POST['id'])
         context = {'id': id}
         check = str(request.POST['check'])
+        submit = str(request.POST['submit'])
         MigrateDataRegis()
         for x in RegistrationRequests:
             MigrateDataBOAUser()
             if str(x.id) == str(check):
-                SendCredentialMail(x.submittedEmailAddress, x.proposedUserName, x.proposedPassword)
-                DropRequest(x.submittedEmailAddress)
-                l = len(BOAUsers) + 1
-                createBOAUser(l, x.proposedUserName, x.proposedPassword, x.submittedEmailAddress, x.requestedUserType)
+                if submit=="Accept":
+                    UpdateBOAUser(x.requestedUserType, x.id)
+                    DropRequest(x.submittedEmailAddress)
+                    context = {'id':id, 'ac':1}
+                else:
+                    DropRequest(x.submittedEmailAddress)
+                    context = {'id':id}
         return render(request, 'user/request_res.html', context)

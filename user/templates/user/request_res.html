@@ -18,9 +18,11 @@
 	<meta name="theme-color" content="#fafafa">
 </head>
 <body>
-
+    {% if ac %}
     <h1> Accept success. </h1>
-
+        {% else %}
+    <h1> Refuse success. </h1>
+    {% endif %}
     <form action="{% url 'user:request' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="id" value={{ id }} >

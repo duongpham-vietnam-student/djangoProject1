@@ -8,20 +8,26 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from register.models import *
 from djangoProject1.common import *
-from register.forms import *
 
+from schedule.models import MigrateData, Employees
+from login.models import MigrateDataBOAUser, BOAUsers
 def index(request):
-    return render(request, 'register/base.html')
+    id = str(request.POST['id'])
+    MigrateDataBOAUser()
+    for i in BOAUsers:
+        if id == str(i.id):
+            boa = i
+    context = {'id': id, 'boa': boa}
+    return render(request, 'register/base.html', context)
 def save(request):
-    if request.method == "POST":
             #lay data
-            email = request.POST['email_ros']
+            id = str(request.POST['id'])
+            email = str(request.POST['email'])
             user_data_type = request.POST['usertype']
             #thuc hien 1 function
             status = CreateRegistrationUser(email, user_data_type)
-
-            context = {'status': status}
-    return render(request, 'register/result.html', context)
+            context = {'status': status, 'id': id}
+            return render(request, 'register/result.html', context)
 
 
 

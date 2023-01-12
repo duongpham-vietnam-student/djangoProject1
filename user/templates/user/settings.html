@@ -25,6 +25,7 @@
             {% csrf_token %}
               <input type="submit" name="setting" value="Dashboard" class="right current">
               <input type="hidden" name="id" value={{ id }} >
+
         </form>
         {% if setup_mode %}
         <form id="empl" method="post" action="{% url 'user:setup' %}" class="left">
@@ -78,17 +79,22 @@
                     {% csrf_token %}
 
                         <input type="hidden" name="id" value= {{ id }}>
-                        <input type="submit" name="save" value="Change your info">
 
+                        <input type="submit" name="save" value="Change your info">
 
                 </form>
                 <form action="{% url 'login:index' %}" method="get">
                     {% csrf_token %}
 
-
                         <input type="submit" id="save" value="Log out">
 
 
+                </form>
+                <form action="{% url 'register:index' %}" method="post">
+                    {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ id }}">
+
+                        <input type="submit"  value="Upgrade your account">
                 </form>
             </div>
 		</div>

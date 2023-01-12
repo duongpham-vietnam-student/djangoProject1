@@ -17,15 +17,20 @@
 
 	<meta name="theme-color" content="#fafafa">
 </head>
+<header>
+	<nav id="nav_main">
+        <form id="sett" method="post" action="{% url 'user:setting' %}" class="right">
+            {% csrf_token %}
+              <input type="submit" name="setting" value="Back" class="right current">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
+	</nav>
+</header>
 <body>
     {% if status  == 1 %}
-    <h1> Your request has been received. Please check your email for login information. </h1>
+    <h1> Your request has been received. Please wait the Root User accept. </h1>
     {% elif status  == 0 %}
     <h1> Registration failed because the email you used already exists. </h1>
     {% endif %}
-    <a href =" {% url 'login:index' %}">
-        Click to return login page!
-    </a>
-
 </body>
 </html>

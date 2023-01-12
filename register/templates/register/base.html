@@ -18,9 +18,12 @@
 	<meta name="theme-color" content="#fafafa">
 </head>
 <header>
-	<nav id="nav_login">
-		<a href="{% url 'login:index' %}" class="left">Login</a>
-		<a href="" class="right current">Register</a>
+	<nav id="nav_main">
+        <form id="sett" method="post" action="{% url 'user:setting' %}" class="right">
+            {% csrf_token %}
+              <input type="submit" name="setting" value="Back" class="right current">
+              <input type="hidden" name="id" value={{ id }} >
+        </form>
 	</nav>
 </header>
 <body>
@@ -30,8 +33,9 @@
     <form action = "{% url 'register:save' %}" method ="post">
         {%csrf_token%}
 	  <div>
-		  <label for="email">Email Address:</label>
-		  <input type="email" id="email" name="email_ros">
+          <h2> EID: {{ id }}</h2>
+		  <h2> Name: {{ boa.username }}</h2>
+          <h2> Email: {{ boa.email }}</h2>
 	  </div>
 	  <h2>User Type</h2>
 	  <ul class="usertype">
@@ -48,6 +52,8 @@
 			  <label for="assist">ASSISTANT</label>
 		  </li>
 	  </ul>
+        <input type="hidden" name="id" value={{ id }}>
+        <input type="hidden" name="email" value={{ boa.email }}>
         <input type="submit" value="Submit">
     </form>
             </div>

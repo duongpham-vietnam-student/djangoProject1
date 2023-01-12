@@ -10,6 +10,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from djangoProject1.common import *
 from django.db import models
+from login.models import BOAUsers, MigrateDataBOAUser
 import random
 # Create your models here.
 class RegistrationRequest():
@@ -77,17 +78,13 @@ def checkRegisterEmail(request):
         cursor1 = connection.cursor()
         cursor2 = connection.cursor()
     # Executing a SQL query
-        cursor1.execute("SELECT email_address from boauser;")
+
         cursor2.execute("SELECT submited_emailadress from registrationrequest;")
     # Fetch result
-        record1 = cursor1.fetchall()
+
         record2 = cursor2.fetchall()
     # The function code
-        #Buoc 1
-        for row in record1:
-            if (request == row[0]):
-                return True
-        #Buoc 2
+
         for row in record2:
             if (request == row[0]):
                 return True
@@ -105,24 +102,22 @@ def CreateRegistrationUser(email, usertype):
         return False
     #cau hinh lai du lieu
     type = int(usertype)
-    username, password = Create_Credential(email)
-
-
+    MigrateDataBOAUser()
+    for i in BOAUsers:
+        if i.email == email:
+            temp = i
+    username = temp.username
+    password = temp.password
     data = HookData("DATABASE")
     try:
         # Connect to an existing database
         connection = psycopg2.connect(**data)
         # Create a cursor to perform database operations
         cursor = connection.cursor()
-        cursor1 = connection.cursor()
-        # Executing a SQL query
-        cursor1.execute("select count(user_id) from registrationrequest")   # lay so luong
-        eid = int(cursor1.fetchone()[0]) + 1   #tao cho no id
-
-        records = (eid, username, password, email, type)
+        records = (temp.id, username, password, email, type)
         query = """insert into registrationrequest(user_id, proposed_username, proposed_password, submited_emailadress, request_user_type) 
                        values (%s,%s,%s,%s,%s)"""
-        cursor.execute(query, records)    #gian tiep
+        cursor.execute(query, records)
         connection.commit()
         return True
     except (Exception, Error) as error:
@@ -163,6 +158,46 @@ def createBOAUser(eid, username, password, email, type):
         records += (eid, username, password, email, type)
         query = """insert into boauser(eid, user_name, pass_word, email_address, user_type) 
                        values (%s,%s,%s,%s,%s)"""
+        cursor.execute(query, records)
+        connection.commit()
+        return 1
+    except (Exception, Error) as error:
+        return 0
+    finally:
+        if (connection):
+            cursor.close()
+            connection.close()
+def UpdateBOAUser(type, eid):
+    data = HookData("DATABASE")
+    try:
+        # Connect to an existing database
+        connection = psycopg2.connect(**data)
+        print(connection)
+        # Create a cursor to perform database operations
+        cursor = connection.cursor()
+        # Executing a SQL query
+        records = (type, eid)
+        query = """update boauser set user_type=%s where eid=%s"""
+        cursor.execute(query, records)
+        connection.commit()
+        return 1
+    except (Exception, Error) as error:
+        return 0
+    finally:
+        if (connection):
+            cursor.close()
+            connection.close()
+def DeleteBOAUser(eid):
+    data = HookData("DATABASE")
+    try:
+        # Connect to an existing database
+        connection = psycopg2.connect(**data)
+        print(connection)
+        # Create a cursor to perform database operations
+        cursor = connection.cursor()
+        # Executing a SQL query
+        records = (eid,)
+        query = """delete from boauser where eid=%s"""
         cursor.execute(query, records)
         connection.commit()
         return 1

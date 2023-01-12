@@ -37,6 +37,7 @@
 				<tbody class="emp-list">
 					<tr class="header">
 						<th style="width:10%">Choose Employee</th>
+                        <th style="width:10%">EID</th>
 						<th style="width:20%">Name</th>
 						<th style="width:15%">Brigade Title</th>
 						<th>Time Off<br/>Reason - Unavailable Hours</th>
@@ -47,8 +48,9 @@
 					{% for emp in data  %}
 					<tr>
 						<td>
-							<input type="radio"  name="check" value="{{ emp.eid }}">
+							<input type="radio" checked="checked" name="check" value="{{ emp.eid }}">
 						</td>
+                        <td>{{ emp.eid }}</td>
 						<td>{{ emp.name }}</td>
 						<td>{{ emp.ti }}</td>
 

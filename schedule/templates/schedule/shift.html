@@ -47,7 +47,7 @@
 					{% for emp in data  %}
 					<tr>
 						<td>
-							<input type="radio"  name="check" value="{{ emp.0 }}/{{ emp.1 }}">
+							<input type="radio" checked="checked" name="check" value="{{ emp.0 }}/{{ emp.1 }}">
 						</td>
                         {% for i in emp %}
 						<td>{{ i }}</td>
