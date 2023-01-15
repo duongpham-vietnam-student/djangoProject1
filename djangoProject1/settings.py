@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-aa99@@g9g5_g642%p27=5-$v#(vvmz9r@c%)u=zw0&j+*t=0fq"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*',]
 
@@ -80,7 +80,8 @@ WSGI_APPLICATION = "djangoProject1.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-DATABASES = {
+if DEBUG:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'BOAProject',
@@ -89,8 +90,19 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '5433',
     }
-}
-if DEBUG:
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'BOAProject',
+            'USER': 'postgres',
+            'PASSWORD': '12345678',
+            'HOST': 'database-2.c7u3agesyras.us-east-1.rds.amazonaws.com',
+            'PORT': '5433',
+        }
+    }
+if DEBUG==False:
     DATABASE = {
         "user": "postgres",
         "password": "12345678",
