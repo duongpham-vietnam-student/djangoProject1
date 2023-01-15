@@ -50,4 +50,3 @@ def MigrateDataBOAUser(): #lay data trong database
         if (connection):
             cursor.close()
             connection.close()
-

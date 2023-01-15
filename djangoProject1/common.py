@@ -2,16 +2,14 @@ from configparser import ConfigParser
 from pathlib import Path
 import string
 import random
+from djangoProject1.settings import DATABASE, SEND_MAIL
 def HookData(request):
-    config = ConfigParser()
-
-    basepath = Path(__file__).parent      #djangopj1/common.py ->djangopj1
-    filepath = (basepath/"config.ini").resolve()  #->djangopj1/config.py
-    # "C://..../config.ini"
-
-    config.read(filepath)
-
-    return dict(config.items(request))
+    if request == "DATABASE":
+        data = DATABASE
+        return data
+    elif request == "SENDMAIL":
+        return SEND_MAIL
+print(HookData("DATABASE"))
 def tranferUsertype(request):
     if int(request) >= 3:
         return "ROOT"

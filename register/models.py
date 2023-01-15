@@ -69,7 +69,7 @@ def SendCredentialMail(email, username, password):   #email nguoi nhan, username
 
     return True
 def checkRegisterEmail(request):
-    # Read config.ini file
+    # Rea file
     data = HookData("DATABASE")
     try:
     # Connect to an existing database
