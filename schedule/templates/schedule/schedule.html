@@ -52,9 +52,9 @@
 						<th style="width:10%">Total Hours</th>
 					</tr>
 					<!-- Use this as template to import Employees -->
-					{% for i in schedule %}
+					{% for i in schedule %} <!-- liệt kê tên nhân viên theo cột dọc-->
                     <tr>
-                        {% for j in i %}
+                        {% for j in i %}  <!-- phân giờ làm của từng nhân viên theo chiêu ngang-->
 						<td>{{ j }}</td>
                         {% endfor %}
 					</tr>

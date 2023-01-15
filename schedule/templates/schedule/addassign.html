@@ -7,11 +7,9 @@
 	<title>FGS - Assignment Editor</title>
 	<meta name="description" content="Edit Employee Page">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
 	<link rel="manifest" href="site.webmanifest">
 	<link rel="apple-touch-icon" href="icon.png">
 	<!-- Place favicon.ico in the root directory -->
-
 
 	<link rel="stylesheet" href="{% static 'main.css' %}">
 	<script src="{% static 'main.js' %}"></script>
@@ -22,9 +20,8 @@
 	<nav id="nav_main">
         <form id="back" method="post" action="{% url 'user:setup' %}">
                 {% csrf_token %}
-              <input type="submit" name="empl" value="Back">
+              <input type="submit" value="Back">
               <input type="hidden" name="id" value={{ id }} >
-
         </form>
 	</nav>
 </header>

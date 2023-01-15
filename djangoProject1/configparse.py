@@ -4,10 +4,10 @@ from configparser import ConfigParser
 config_object = ConfigParser()
 
 config_object["DATABASE"] = {
-                                  "user": "admin1",
-                                  "password": "1234567",
-                                  "host": "6.tcp.ngrok.io", #local
-                                  "port": "12174",
+                                  "user": "postgres",
+                                  "password": "12345678",
+                                  "host": "database-2.c7u3agesyras.us-east-1.rds.amazonaws.com",
+                                  "port": "5433",
                                   "database": "BOAProject"
                                 }
 config_object["SENDMAIL"] = {

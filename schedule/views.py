@@ -8,51 +8,55 @@ def index(request):
     id = str(request.POST['id'])
     s = list(MigrateSchedule())
     MigrateData()
-    for i in range(len(s)):
-        s[i] = list(s[i])
-    for i in s:
+
+    for i in s: # sau khi edit nhân vien, nêu chọn xoá nhan vien -> nhan vien bi xoá trong thoi khoá biểu
         find = 0
         for j in Employees:
             if i[0]==j.eid:
                 find = 1
         if find==0:
             s.remove(i)
-    for i in s:
+
+    for i in s: # biến đổi lần lượt id = name cua emp.
         for j in Employees:
             if i[0]==j.eid:
                 i[0] = j.name
-    for i in range(len(Employees)-len(s)):
+    for i in range(len(Employees)-len(s)): # edit employee --> thêm nhân viên
         matrix = []
-        matrix.append(Employees[len(Employees)+i])
+        matrix.append(Employees[len(Employees)+i-1].name)
         for i in range(1,15):
             matrix.append(-1)
         matrix.append(0)
         s.append(matrix)
     context = []
-    for i in range(len(Employees)):
+    for i in range(len(Employees)): #upload from employee table to schedule
         temp = []
         context.append(temp)
-    for i in range(len(s)):
-        context[i].append(s[i][0])
+    for i in range(len(s)): # s la du lieu schedule back-end hieu, context la du lieu schedule hien thi tren web.
+        # câu lệnh nay de chuyen s thanh context
+        context[i].append(s[i][0]) #them gia trị name cua s vao context
         for j in range(1, 15):
-            context[i].append(change(s[i][j]))
-        context[i].append(s[i][15])
-    num, lis= Assignment_fill()
+            context[i].append(change(s[i][j]))  #biên đổi thứ tuự chữ số vào asignment tuong ứng
+        context[i].append(s[i][15]) # thêm giá trị cost hours
+
+
+
+    num, lis= Assignment_fill()  #num=4, lis ["expo", "line", "prep",""] ,expo Am, expo pm--> expo
     list_name_assignment = list(lis)
     super_context = []
-    number_week = show_assignment()
+    number_week = show_assignment() # số nhân viên làm 1 ca trong tuần
     for i in range(num):
         temp = []
-        temp.append(list_name_assignment[i])
+        temp.append(list_name_assignment[i]) # add asignment cua num vào cột đâu tiên cua schedule
         for j in range(len(Shifts)):
-            temp.append(number_week[i][j])
+            temp.append(number_week[i][j]) # thêm vào số nhân viên cần làm trong tuần theo hang ngang
         super_context.append(temp)
-        con = {'schedule': context, 'number_week': super_context, 'id': id}
+        con = {'schedule': context, 'number_week': super_context, 'id': id} #dictionary
     MigrateDataBOAUser()
     for i in BOAUsers:
         if str(i.id) == id:
             temp = i
-    if int(temp.type) > 0:
+    if int(temp.type) > 0: # mode >=1,  phan quyen type > 0, de co quyên edit
         con = {'schedule': context, 'number_week': super_context, 'id': id, 'mode':1}
     return render(request, 'schedule/schedule.html', con)
 # Create your views here.
@@ -60,20 +64,40 @@ def index(request):
 
 def generate(request):
     id = str(request.POST['id'])
-
     context = {'id':id}
     submit = str(request.POST['submit'])
     if submit=="Generate Schedule":
-        while 1:
-            s = create_schedule()
+        while 1: # tìm cho đến khi tìm dc schedule
+            s = create_schedule() #chay thuát toán trong model tim f schedule
             if s == 1:
                 return render(request, 'schedule/res.html', context)
-    else:
+    else: #manual edit
         MigrateData()
         num, l = Assignment_fill()
-        assi = ["No work"] + list(l)
+        assi = ["No work"] + list(l) # ("ẽpo",,,"no work")
         context ={'id':id, 'emp':Employees, 'assi':assi}
         return render(request, 'schedule/manual.html', context)
+
+def editempl(request):
+        id = str(request.POST['id'])
+        submit = str(request.POST['submit'])
+        if submit == "Edit Employee":
+            check = str(request.POST['check'])
+            MigrateData()
+            for i in Employees:
+                if str(i.eid) == check:
+                    context = {'data': i, 'id': id}
+                    return render(request, 'schedule/editemploy.html', context)
+        elif submit == "Create Employee":
+            context = {'id': id}
+            return render(request, 'schedule/addemploy.html', context)
+        elif submit == "Delete Employee":
+            check = str(request.POST['check'])
+            dataset = (check,)
+            DeleteValue("e", dataset)
+            MigrateData()
+            context = {'id': id, 'data': Employees}
+            return render(request, 'schedule/employee.html', context)
 def edit_create_employ(request):
     id = str(request.POST['id'])
     submit = str(request.POST['submit'])
@@ -82,8 +106,9 @@ def edit_create_employ(request):
     title = int(request.POST['title'])
     minhour = int(request.POST['minhour'])
     maxhour = int(request.POST['maxhour'])
-    email = str(request.POST['e_mail'])
+
     if submit == "Accept Create":
+        email = str(request.POST['e_mail'])
         dataset = (eid, name, title, minhour, maxhour)
         status = AddValue("e", dataset)
         if status==1:
@@ -112,27 +137,7 @@ def edit_create_employ(request):
                 return render(request, 'schedule/unavailabletime.html', context)
         return render(request, 'schedule/unavailabletime.html', context)
 
-def editempl(request):
-    id = str(request.POST['id'])
 
-    submit = str(request.POST['submit'])
-    if submit=="Edit Employee":
-        check = str(request.POST['check'])
-        MigrateData()
-        for i in Employees:
-            if str(i.eid)==check:
-                context = {'data': i, 'id':id }
-                return render(request, 'schedule/editemploy.html', context)
-    elif submit=="Create Employee":
-        context = {'id':id}
-        return render(request, 'schedule/addemploy.html', context)
-    elif submit=="Delete Employee":
-        check = str(request.POST['check'])
-        dataset = (check,)
-        DeleteValue("e", dataset)
-        MigrateData()
-        context = {'id':id, 'data':Employees}
-        return render(request, 'schedule/employee.html', context)
 def editassi(request):
     id = str(request.POST['id'])
     submit = str(request.POST['submit'])

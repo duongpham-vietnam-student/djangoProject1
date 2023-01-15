@@ -85,10 +85,10 @@ DATABASES = {
     "default": {
        'ENGINE': 'django.db.backends.postgresql',
        'NAME': 'BOAProject',
-       'USER': 'admin1',
-       'PASSWORD': '1234567',
-       'HOST': '6.tcp.ngrok.io',
-       'PORT': '12174',
+       'USER': 'postgres',
+       'PASSWORD': '12345678',
+       'HOST': 'database-2.c7u3agesyras.us-east-1.rds.amazonaws.com',
+       'PORT': '5433',
     }
 }
 db_from_env = dj_database_url.config(conn_max_age=600)
@@ -129,10 +129,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-if DEBUG:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static',)]
+if DEBUG: #if debug = true
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static',)] #online server
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static') #local
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
 # Default primary key field type
